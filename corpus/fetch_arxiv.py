@@ -1,11 +1,18 @@
 import os, re, arxiv
 
 OUT = "raw"
+
 QUERIES = [
-    "LLM evaluation", "retrieval augmented generation", "LLM as a judge",
-    "dense retrieval", "LLM agents tool use", "context engineering language models",
-    "hallucination detection language models", "benchmark contamination language models",
+    'cat:cs.CL AND abs:"LLM evaluation"',
+    'cat:cs.CL AND abs:"retrieval augmented generation"',
+    'cat:cs.CL AND abs:"LLM as a judge"',
+    'cat:cs.IR AND abs:"dense retrieval"',
+    'cat:cs.CL AND abs:"language model agents"',
+    'cat:cs.CL AND abs:"long context"',
+    'cat:cs.CL AND abs:"hallucination"',
+    'cat:cs.CL AND abs:"benchmark contamination"',
 ]
+
 
 def slug(s):
     return re.sub(r"[^a-z0-9]+", "-", s.lower()).strip("-")[:70]
