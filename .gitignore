@@ -3,6 +3,7 @@ __pycache__/
 .env
 venv/
 .venv/
-wiki_local/
+wiki_local/pages/
 index-rag-venv/
 raw/
+.DS_Store

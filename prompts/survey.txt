@@ -1,0 +1,89 @@
+You are an expert systems librarian analyzing a corpus of 223 research and
+engineering documents to build the seed taxonomy for an LLM Systems Wiki.
+
+CORPUS OVERVIEW:
+223 documents spanning LLM evaluation, retrieval, hallucination, long context,
+benchmark contamination, and agents.
+Sources are tagged as [Academic] (arXiv abstracts) or [Practitioner] (engineering
+postmortems, production blogs, framework documentation).
+Each document is uniquely identified as [DOC-XXX].
+
+TASK:
+Group all 223 documents into distinct, non-overlapping concept and entity clusters
+based strictly on primary topic.
+
+CORE RULES:
+
+1. Group by concept, not document. A concept is an architectural technique, failure
+   mode, or mechanism someone would search for — e.g. "position-bias-in-llm-judges",
+   not "papers-about-eval".
+
+2. 100% corpus coverage. Every [DOC-XXX] from DOC-001 to DOC-223 must appear in
+   EXACTLY ONE cluster's document_ids list. No duplicates, no dropped IDs.
+
+3. Classify type:
+   - "concept": techniques, paradigms, failure modes, theoretical limits.
+     Examples from this corpus: dense-retrieval, context-rot,
+     position-bias-in-llm-judges, faithfulness-hallucination.
+   - "entity": named frameworks, benchmark suites, tools, models.
+     Examples from this corpus: ragas, longbench, dspy, mmlu.
+
+4. Identify friction. Set is_contested: true when sources in the cluster take
+   different positions — not only when they explicitly contradict each other.
+   Positional disagreement counts: a practitioner arguing that a widely-used
+   academic method fails in production is contested, even if no source names
+   another. Ask of every cluster: would two authors here give different advice
+   to someone building this? If yes, it is contested.
+
+5. Sizing and granularity:
+   - Target 40 to 65 clusters.
+   - Document counts reflect how this corpus was collected, not how important a
+     concept is. Treat a count as a prompt to look closer, never as a rule that
+     fires automatically.
+   - Above ~10 documents: check whether the cluster contains genuinely separable
+     sub-concepts. Split only if it does. Over-sampling is not a reason to split.
+   - At 1-2 documents: merge into a neighbouring cluster, UNLESS the source argues
+     a distinct position. Contrarian positions earn a page regardless of count.
+
+6. Disagreement never justifies a split. If sources in a cluster take opposing
+   positions, they stay in the SAME cluster and it is marked contested. Never
+   create a page for "critiques of X" or "contrarian views on X" — the critique
+   belongs on X's page. A reader looking up X must encounter the counterargument
+   there.
+
+7. Single-document clusters are a failure signal. Before creating one, ask: does
+   this document's topic genuinely have no home among the other clusters? If it
+   is a paper introducing one tool, model, or narrow application, it belongs
+   merged into the nearest concept. Aim for zero single-document clusters.
+
+8. Hard ceiling: 45 clusters. If you exceed it, merge the most similar pairs
+   until you are under. Prefer a coarse page with sections over two thin pages.
+
+SUMMARY REQUIREMENTS:
+The summary is a discriminative routing string. Its only purpose is to let a routing
+model decide whether to open this page instead of an adjacent one.
+
+BAD:  "About evaluating language models and methods."
+GOOD: "Using LLMs to score generated outputs; prompt topologies, position and
+       verbosity bias mitigation, and divergence from human labels."
+
+Test every summary: if two summaries could plausibly describe each other's page,
+rewrite both until they cannot.
+
+OUTPUT SPECIFICATION:
+Return a single valid JSON object. No preamble, no markdown fences.
+
+{
+  "clusters": [
+    {
+      "slug": "kebab-case-name",
+      "type": "concept" | "entity",
+      "summary": "1-2 sentence discriminative routing description",
+      "document_ids": ["DOC-001", "DOC-045"],
+      "academic_count": 1,
+      "practitioner_count": 1,
+      "is_contested": true,
+      "contention_notes": "Core tension, or null if is_contested is false."
+    }
+  ]
+}
