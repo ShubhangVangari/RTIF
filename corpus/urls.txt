@@ -1,0 +1,36 @@
+https://hamel.dev/blog/posts/evals/ 
+https://hamel.dev/notes/llm/evals/
+https://eugeneyan.com/writing/evals/
+https://eugeneyan.com/writing/llm-patterns/
+https://applied-llms.org/
+https://arxiv.org/abs/2404.12272
+https://research.trychroma.com/context-rot
+https://hamel.dev/notes/llm/rag/p6-context_rot.html
+https://research.trychroma.com/evaluating-chunking
+https://simonwillison.net/2025/Nov/2/new-prompt-injection-papers/
+
+# RAG 
+
+https://jxnl.co/writing/2023/09/17/rag-is-more-than-embeddings/
+https://jxnl.co/writing/2025/01/24/systematically-improving-rag-applications/
+https://jxnl.co/writing/2024/05/22/systematically-improving-your-rag/
+https://jxnl.co/writing/category/rag/
+https://www.anthropic.com/news/contextual-retrieval
+https://www.dbreunig.com/2025/06/22/how-contexts-fail-and-how-to-fix-them.html
+https://www.dbreunig.com/2025/06/26/how-to-fix-your-context.html
+
+# Agent Design
+
+https://www.anthropic.com/engineering/building-effective-agents
+https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents
+https://www.anthropic.com/engineering/multi-agent-research-system
+https://cognition.com/blog/dont-build-multi-agents
+https://cognition.com/blog/multi-agents-working
+https://claude.com/blog/building-multi-agent-systems-when-and-how-to-use-them
+https://github.com/humanlayer/12-factor-agents
+https://utkarshkanwat.com/writing/betting-against-agents
+https://huyenchip.com/2025/01/07/agents.html
+https://ampcode.com/how-to-build-an-agent
+https://lucumr.pocoo.org/2025/7/3/tools/
+https://simonwillison.net/2025/Jun/16/the-lethal-trifecta/
+https://openai.com/business/guides-and-resources/a-practical-guide-to-building-ai-agents/

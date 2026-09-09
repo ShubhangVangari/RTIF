@@ -5,3 +5,4 @@ venv/
 .venv/
 wiki_local/
 index-rag-venv/
+raw/
