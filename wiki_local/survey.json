@@ -1,9 +1,38 @@
 {
   "clusters": [
     {
+      "slug": "llm-evaluation-frameworks-and-critiques",
+      "type": "concept",
+      "summary": "Why static benchmarks fail as evaluation and what replaces them: skill-based factor analysis, dynamic interaction protocols, benchmark error detection, and practitioner methods for building task-specific eval suites through error analysis. Concerns evaluation design generally; for using a model as the evaluator, see llm-as-a-judge-evaluation-and-alignment.",
+      "document_ids": [
+        "DOC-014",
+        "DOC-023",
+        "DOC-026",
+        "DOC-039",
+        "DOC-075",
+        "DOC-077",
+        "DOC-078",
+        "DOC-089",
+        "DOC-091",
+        "DOC-092",
+        "DOC-097",
+        "DOC-175",
+        "DOC-186",
+        "DOC-196",
+        "DOC-211",
+        "DOC-216",
+        "DOC-219",
+        "DOC-223"
+      ],
+      "academic_count": 13,
+      "practitioner_count": 5,
+      "is_contested": false,
+      "contention_notes": ""
+    },
+    {
       "slug": "llm-as-a-judge-evaluation-and-alignment",
       "type": "concept",
-      "summary": "Methods and frameworks for assessing the performance of LLM judges, aligning their judgments with human preferences, and applying them to specialized domains like code, law, and creative writing.",
+      "summary": "How to use a large language model as an evaluator, including assessing its performance, aligning its judgments with human preferences, and applying it to specialized domains. Concerns the general framework and application; for inherent flaws and failure modes, see llm-as-a-judge-bias-and-reliability.",
       "document_ids": [
         "DOC-006",
         "DOC-013",
@@ -31,7 +60,7 @@
     {
       "slug": "dense-retrieval",
       "type": "concept",
-      "summary": "Using dual-encoder models to map queries and documents into a shared vector space for semantic search, including scaling laws, domain adaptation, and model selection.",
+      "summary": "The foundational method of mapping queries and documents into a shared vector space for semantic search using dual-encoder models. Concerns single-shot, stateless retrieval; for multi-turn dialogues, see conversational-dense-retrieval; for combining with other methods, see hybrid-and-multi-hop-retrieval.",
       "document_ids": [
         "DOC-015",
         "DOC-028",
@@ -59,7 +88,7 @@
     {
       "slug": "advanced-rag-architectures",
       "type": "concept",
-      "summary": "Complex RAG patterns beyond simple retrieval, including iterative retrieval, filtering retrieved content, multi-agent synthesis, and augmenting with multimodal data.",
+      "summary": "Multi-step RAG patterns beyond simple 'retrieve-then-read', such as iterative retrieval, post-retrieval filtering, and multi-agent synthesis. Practitioners argue these are required for production use, unlike simple RAG. Concerns system-level patterns; for pre-retrieval processing, see rag-chunking-and-preprocessing.",
       "document_ids": [
         "DOC-005",
         "DOC-042",
@@ -79,12 +108,13 @@
       "academic_count": 10,
       "practitioner_count": 4,
       "is_contested": true,
-      "contention_notes": "Practitioner sources argue that simple embedding search is 'demoware' and that production RAG requires more complex, systematic architectures, a view supported by academic research into advanced patterns."
+      "contention_notes": "Practitioner sources argue that simple embedding search is 'demoware' and that production RAG requires more complex, systematic architectures, a view supported by academic research into advanced patterns.",
+      "flag_payload": "whether single-pass retrieval is sufficient in production or requires iterative architectures"
     },
     {
       "slug": "llm-as-a-judge-bias-and-reliability",
       "type": "concept",
-      "summary": "Investigating and quantifying the inherent biases (position, verbosity, fairness) and consistency issues in using LLMs as automated evaluators for text generation tasks.",
+      "summary": "Inherent flaws in using LLMs as evaluators, including position and verbosity biases, fairness concerns, and inconsistent judgments. The corpus is divided on whether these flaws invalidate the paradigm or can be mitigated. Concerns reliability and bias; for the general framework and application, see llm-as-a-judge-evaluation-and-alignment.",
       "document_ids": [
         "DOC-010",
         "DOC-048",
@@ -103,36 +133,13 @@
       "academic_count": 12,
       "practitioner_count": 1,
       "is_contested": true,
-      "contention_notes": "While the existence of biases is broadly accepted, the severity and impact on evaluation outcomes are debated. Some papers propose mitigation techniques, while others question the fundamental reliability of the paradigm without significant human oversight."
-    },
-    {
-      "slug": "llm-evaluation-frameworks-and-critiques",
-      "type": "concept",
-      "summary": "Critiques of static benchmarks and proposals for new evaluation paradigms, including skill-based factor analysis, dynamic interaction, and methods for identifying benchmark errors.",
-      "document_ids": [
-        "DOC-014",
-        "DOC-023",
-        "DOC-026",
-        "DOC-039",
-        "DOC-075",
-        "DOC-077",
-        "DOC-078",
-        "DOC-089",
-        "DOC-091",
-        "DOC-092",
-        "DOC-097",
-        "DOC-175",
-        "DOC-186"
-      ],
-      "academic_count": 13,
-      "practitioner_count": 0,
-      "is_contested": false,
-      "contention_notes": ""
+      "contention_notes": "While the existence of biases is broadly accepted, the severity and impact on evaluation outcomes are debated. Some papers propose mitigation techniques, while others question the fundamental reliability of the paradigm without significant human oversight.",
+      "flag_payload": "whether the inherent biases of LLM judges invalidate the paradigm or are mitigatable."
     },
     {
       "slug": "long-context-training-and-sft",
       "type": "concept",
-      "summary": "Techniques for extending the effective context length of pre-trained models, including continued pre-training, supervised fine-tuning (SFT), and synthesizing long-context instruction data.",
+      "summary": "How to extend a model's effective context length through continued pre-training, supervised fine-tuning, and synthesizing long-context instruction data. Concerns building and training models; for assessing their long-context capabilities, see long-context-evaluation.",
       "document_ids": [
         "DOC-007",
         "DOC-096",
@@ -154,7 +161,7 @@
     {
       "slug": "benchmark-data-contamination",
       "type": "concept",
-      "summary": "The problem of test data leaking into model training sets, its impact on leaderboard reliability, and the creation of contamination-free benchmarks.",
+      "summary": "The problem of test data leaking into training sets and its impact on benchmark validity. While most agree this is a critical flaw, some argue it rarely changes model rankings. Concerns the effects of contamination; for methods to find it, see contamination-detection-methods.",
       "document_ids": [
         "DOC-020",
         "DOC-040",
@@ -171,12 +178,13 @@
       "academic_count": 11,
       "practitioner_count": 0,
       "is_contested": true,
-      "contention_notes": "While most sources treat contamination as a critical flaw invalidating benchmark scores, at least one paper (DOC-040) argues that while it inflates absolute scores, it rarely changes the relative ranking of models on leaderboards."
+      "contention_notes": "While most sources treat contamination as a critical flaw invalidating benchmark scores, at least one paper (DOC-040) argues that while it inflates absolute scores, it rarely changes the relative ranking of models on leaderboards.",
+      "flag_payload": "whether benchmark data contamination invalidates relative model rankings or only absolute scores."
     },
     {
       "slug": "hallucination-detection-and-mitigation",
       "type": "concept",
-      "summary": "Surveys, definitions, and general methods for automatically identifying and reducing the generation of factually incorrect or non-verifiable content in LLM outputs.",
+      "summary": "The general problem of factually incorrect or non-verifiable content in LLM outputs, including definitions, taxonomies, and methods for detection and mitigation. Concerns hallucination broadly; for specific types, see faithfulness-hallucination, intent-and-behavioral-hallucination, or multimodal-hallucination.",
       "document_ids": [
         "DOC-004",
         "DOC-009",
@@ -197,7 +205,7 @@
     {
       "slug": "llm-agent-training-and-self-improvement",
       "type": "concept",
-      "summary": "Methods for improving agent capabilities through experience, including reinforcement learning from failures, hindsight relabeling of trajectories, and distillation from more capable teacher models.",
+      "summary": "How an agent can improve its own capabilities through experience, using reinforcement learning from failures, hindsight relabeling, and distillation from teacher models. Concerns learning and adaptation; for assessing agent capabilities, see llm-agent-evaluation.",
       "document_ids": [
         "DOC-008",
         "DOC-017",
@@ -217,7 +225,7 @@
     {
       "slug": "multilingual-llm-evaluation",
       "type": "concept",
-      "summary": "Challenges and benchmarks for evaluating LLM performance and safety in non-English and low-resource languages, including hallucination detection and localization of existing benchmarks.",
+      "summary": "The specific challenges of evaluating LLM performance and safety in non-English and low-resource languages, including culturally-aware benchmarks and non-English hallucination detection. Concerns multilingual contexts; for general evaluation principles, see llm-evaluation-frameworks-and-critiques.",
       "document_ids": [
         "DOC-003",
         "DOC-029",
@@ -237,7 +245,7 @@
     {
       "slug": "multimodal-hallucination",
       "type": "concept",
-      "summary": "The generation of textual descriptions that are inconsistent with or unsupported by the content of an accompanying image or video, including object, attribute, and relationship errors.",
+      "summary": "When a model's textual description is inconsistent with or unsupported by an accompanying image or video, including errors in objects, attributes, and relationships. Concerns vision-language models; for text-only factual errors, see hallucination-detection-and-mitigation.",
       "document_ids": [
         "DOC-047",
         "DOC-051",
@@ -256,7 +264,7 @@
     {
       "slug": "long-context-evaluation",
       "type": "concept",
-      "summary": "Benchmarks and methodologies for assessing the true long-context capabilities of LLMs, moving beyond simple 'needle-in-a-haystack' tests to evaluate reasoning and referencing over long inputs.",
+      "summary": "How to assess the true long-context capabilities of models, moving beyond simple 'needle-in-a-haystack' tests to evaluate reasoning and referencing over long inputs. Concerns measuring performance; for methods to create long-context models, see long-context-training-and-sft.",
       "document_ids": [
         "DOC-001",
         "DOC-035",
@@ -275,7 +283,7 @@
     {
       "slug": "contamination-detection-methods",
       "type": "concept",
-      "summary": "Techniques for detecting whether a model has been trained on benchmark data, using methods like membership inference, gradient analysis, logit trajectories, and large-scale n-gram search.",
+      "summary": "How to determine if a model was trained on benchmark data, using methods like membership inference, gradient analysis, logit trajectories, and large-scale n-gram search. Concerns methods for detection; for the impact of contamination on benchmark validity, see benchmark-data-contamination.",
       "document_ids": [
         "DOC-052",
         "DOC-069",
@@ -294,7 +302,7 @@
     {
       "slug": "llm-agent-design-patterns",
       "type": "concept",
-      "summary": "High-level practitioner guidance and principles for building robust and effective LLM agents, covering topics from simple tool use to complex, multi-step reasoning systems.",
+      "summary": "Reusable solutions and high-level principles for building single LLM agents, from simple tool use to complex reasoning loops. Practitioner advice is varied and often contradictory on the complexity required. Concerns behavioral patterns; for cognitive components, see llm-agent-architectures.",
       "document_ids": [
         "DOC-194",
         "DOC-195",
@@ -306,12 +314,13 @@
       "academic_count": 0,
       "practitioner_count": 6,
       "is_contested": true,
-      "contention_notes": "Practitioner advice is varied and sometimes contradictory, with some advocating for simple, composable patterns and others exploring more complex frameworks. There is also a debate on whether 2025 is 'the year of the agent' or if the technology is overhyped."
+      "contention_notes": "Practitioner advice is varied and sometimes contradictory, with some advocating for simple, composable patterns and others exploring more complex frameworks. There is also a debate on whether 2025 is 'the year of the agent' or if the technology is overhyped.",
+      "flag_payload": "whether effective LLM agents require simple, composable patterns or more complex frameworks."
     },
     {
       "slug": "faithfulness-hallucination",
       "type": "concept",
-      "summary": "The specific failure mode where a model's output contradicts or is not supported by the provided source documents, particularly in the context of Retrieval-Augmented Generation (RAG).",
+      "summary": "The specific failure where a model's output contradicts or is not supported by its provided source documents, a key problem in Retrieval-Augmented Generation (RAG). Concerns contradiction of provided context; for factuality errors without a source context, see hallucination-detection-and-mitigation.",
       "document_ids": [
         "DOC-022",
         "DOC-031",
@@ -327,7 +336,7 @@
     {
       "slug": "llm-agent-architectures",
       "type": "concept",
-      "summary": "Modular frameworks for structuring agent cognition, such as separating planning, retrieval, and execution, using behavior trees, or integrating symbolic logic with neural reasoning.",
+      "summary": "The internal cognitive structure of a single agent, such as separating planning, memory, and execution modules, or integrating symbolic logic with neural components. Concerns an agent's internal components; for behavioral patterns, see llm-agent-design-patterns.",
       "document_ids": [
         "DOC-019",
         "DOC-027",
@@ -343,7 +352,7 @@
     {
       "slug": "multi-agent-systems",
       "type": "concept",
-      "summary": "Architectures where multiple distinct LLM agents collaborate, debate, or perform specialized sub-tasks to solve a larger problem, including debates on their practical viability in production.",
+      "summary": "Systems where multiple distinct LLM agents collaborate, debate, or perform specialized sub-tasks to solve a larger problem. Practitioner sources are heavily divided on their production viability. Concerns systems of multiple agents; for the internal structure of a single agent, see llm-agent-architectures.",
       "document_ids": [
         "DOC-002",
         "DOC-200",
@@ -354,12 +363,13 @@
       "academic_count": 1,
       "practitioner_count": 4,
       "is_contested": true,
-      "contention_notes": "Practitioner sources are heavily divided. Some argue for simple, reactive patterns and warn against multi-agent complexity ('Don't Build Multi-Agents'), while others present case studies of successful production multi-agent systems and when to use them."
+      "contention_notes": "Practitioner sources are heavily divided. Some argue for simple, reactive patterns and warn against multi-agent complexity ('Don't Build Multi-Agents'), while others present case studies of successful production multi-agent systems and when to use them.",
+      "flag_payload": "whether running multiple agents improves or degrades production reliability"
     },
     {
       "slug": "llm-agent-safety-and-security",
       "type": "concept",
-      "summary": "Analysis of safety and security risks in agentic systems, including prompt injection, exposure of private data via tools, and emergent unsafe behavior under pressure to achieve goals.",
+      "summary": "Safety and security risks unique to agentic systems, such as prompt injection through external tools, exfiltration of private data, and emergent unsafe behavior under goal pressure. Concerns risks and vulnerabilities; for agent construction, see llm-agent-design-patterns.",
       "document_ids": [
         "DOC-141",
         "DOC-157",
@@ -373,25 +383,9 @@
       "contention_notes": ""
     },
     {
-      "slug": "practitioner-llm-evaluation",
-      "type": "concept",
-      "summary": "Practical guides and patterns from engineers on building robust evaluation systems for production AI products, focusing on workflow, error analysis, and creating task-specific metrics.",
-      "document_ids": [
-        "DOC-196",
-        "DOC-211",
-        "DOC-216",
-        "DOC-219",
-        "DOC-223"
-      ],
-      "academic_count": 0,
-      "practitioner_count": 5,
-      "is_contested": false,
-      "contention_notes": ""
-    },
-    {
       "slug": "rag-vs-long-context",
       "type": "concept",
-      "summary": "The strategic debate over whether to use Retrieval-Augmented Generation (RAG) to inject specific knowledge versus relying on ever-larger model context windows to contain all necessary information.",
+      "summary": "The strategic debate over using Retrieval-Augmented Generation (RAG) versus relying on large context windows. Practitioners and academics disagree on whether long context can replace RAG in production. Concerns the high-level choice; for implementing RAG, see advanced-rag-architectures.",
       "document_ids": [
         "DOC-012",
         "DOC-055",
@@ -401,12 +395,13 @@
       "academic_count": 3,
       "practitioner_count": 1,
       "is_contested": true,
-      "contention_notes": "Academic papers explore the trade-offs, with some arguing long-context models can replace RAG. Practitioner sources argue that long-context models fail in predictable ways (e.g., context rot) and that RAG remains necessary for production systems."
+      "contention_notes": "Academic papers explore the trade-offs, with some arguing long-context models can replace RAG. Practitioner sources argue that long-context models fail in predictable ways (e.g., context rot) and that RAG remains necessary for production systems.",
+      "flag_payload": "whether large context windows make Retrieval-Augmented Generation (RAG) obsolete for production systems."
     },
     {
       "slug": "domain-specific-rag",
       "type": "concept",
-      "summary": "Adapting and evaluating RAG systems for specialized domains like technical documentation, medicine, and multilingual contexts, where general-purpose embeddings may be insufficient.",
+      "summary": "How to adapt and evaluate RAG systems for specialized domains like medicine or law, where general-purpose embeddings and retrieval strategies may be insufficient. Concerns domain adaptation; for general-purpose RAG system design, see advanced-rag-architectures.",
       "document_ids": [
         "DOC-139",
         "DOC-146",
@@ -421,7 +416,7 @@
     {
       "slug": "llm-agent-evaluation",
       "type": "concept",
-      "summary": "Benchmarks and frameworks for evaluating the capabilities of LLM agents on complex, multi-step tasks, including creative problem-solving, resource acquisition, and interaction with desktop/web environments.",
+      "summary": "How to measure the capabilities of LLM agents on complex, multi-step tasks like web navigation, tool use, and creative problem-solving. Concerns assessing agent performance; for methods to improve agent capabilities through experience, see llm-agent-training-and-self-improvement.",
       "document_ids": [
         "DOC-061",
         "DOC-063",
@@ -436,7 +431,7 @@
     {
       "slug": "context-engineering",
       "type": "concept",
-      "summary": "The practice of structuring and providing the right information (tools, documents, instructions) in the model's context to achieve desired behavior, including automated prompt optimization.",
+      "summary": "The practice of structuring the model's context window with the right information—instructions, examples, tools, and retrieved documents—to achieve a desired behavior. Concerns the general craft of context management; for a specific application to document retrieval, see advanced-rag-architectures.",
       "document_ids": [
         "DOC-016",
         "DOC-201",
@@ -451,7 +446,7 @@
     {
       "slug": "conversational-dense-retrieval",
       "type": "concept",
-      "summary": "Adapting dense retrieval techniques for multi-turn conversational search, focusing on query rewriting, session context embedding, and generating synthetic training data.",
+      "summary": "How to maintain search relevance across a multi-turn conversation, focusing on query rewriting, session context embedding, and synthetic data generation. Concerns stateful, conversational search; for the stateless baseline, see dense-retrieval.",
       "document_ids": [
         "DOC-044",
         "DOC-049",
@@ -465,7 +460,7 @@
     {
       "slug": "hybrid-and-multi-hop-retrieval",
       "type": "concept",
-      "summary": "Techniques for complex question answering that either combine dense (semantic) and sparse (lexical) retrieval signals or decompose a query to retrieve and synthesize information from multiple documents.",
+      "summary": "Complex retrieval that either combines dense (semantic) and sparse (lexical) signals or decomposes a query to retrieve and synthesize information from multiple documents. Concerns complex queries requiring multiple steps or signals; for the single-signal baseline, see dense-retrieval.",
       "document_ids": [
         "DOC-037",
         "DOC-074",
@@ -479,7 +474,7 @@
     {
       "slug": "rag-chunking-and-preprocessing",
       "type": "concept",
-      "summary": "Strategies for segmenting documents into optimal sizes and formats for retrieval, including fixed-size, recursive, and semantic chunking, and evaluating their impact on RAG performance.",
+      "summary": "How to segment documents into optimal sizes and formats for retrieval, including fixed-size, recursive, and semantic chunking, and how to evaluate their impact on RAG performance. Concerns the pre-retrieval preparation of documents; for system-level RAG design, see advanced-rag-architectures.",
       "document_ids": [
         "DOC-062",
         "DOC-173",
@@ -493,7 +488,7 @@
     {
       "slug": "graph-based-rag",
       "type": "concept",
-      "summary": "Enhancing RAG by leveraging knowledge graphs to capture entity relationships and community structures, aiming to improve contextual understanding and reasoning over retrieved information.",
+      "summary": "Using knowledge graphs to enhance RAG by capturing entity relationships and structured information, aiming to improve contextual understanding and reasoning over retrieved documents. Concerns a specific data structure for retrieval; for general system-level patterns, see advanced-rag-architectures.",
       "document_ids": [
         "DOC-038",
         "DOC-057",
@@ -507,7 +502,7 @@
     {
       "slug": "context-rot-and-long-context-failure-modes",
       "type": "concept",
-      "summary": "The phenomenon where LLM performance degrades as input context length increases, including distraction from relevant information and poisoning from erroneous data within the context.",
+      "summary": "The phenomenon where model performance degrades as input context length increases, including distraction by irrelevant information ('lost in the middle') and performance drops from noisy data. Concerns failure modes; for methods to measure long-context performance, see long-context-evaluation.",
       "document_ids": [
         "DOC-198",
         "DOC-206",
@@ -521,7 +516,7 @@
     {
       "slug": "intent-and-behavioral-hallucination",
       "type": "concept",
-      "summary": "A type of hallucination where the model fails to adhere to user instructions or constraints within a prompt, distinct from generating factually incorrect information.",
+      "summary": "The failure to adhere to user instructions or constraints within a prompt, such as ignoring a persona or output format request. This is distinct from generating factually incorrect information. Concerns instruction-following failures; for factual errors, see hallucination-detection-and-mitigation.",
       "document_ids": [
         "DOC-024",
         "DOC-134"
@@ -534,7 +529,7 @@
     {
       "slug": "pseudo-relevance-feedback",
       "type": "concept",
-      "summary": "An iterative retrieval technique where the top documents from an initial search are used to refine or expand the query for a second, more accurate retrieval pass.",
+      "summary": "An iterative two-pass technique where top documents from an initial search are used to automatically refine or expand the query for a second, more accurate retrieval pass. Concerns query refinement using initial results; for decomposing a query into sub-questions, see hybrid-and-multi-hop-retrieval.",
       "document_ids": [
         "DOC-094",
         "DOC-115"
@@ -547,7 +542,7 @@
     {
       "slug": "end-to-end-trainable-rag",
       "type": "concept",
-      "summary": "Methods for making the retrieval component of a RAG system differentiable, allowing the retriever and generator to be trained jointly to improve task performance.",
+      "summary": "Making the retrieval component of a RAG system differentiable, allowing the retriever and generator models to be trained jointly to improve end-to-end task performance. Concerns a specific training paradigm; for architectural patterns using pre-trained components, see advanced-rag-architectures.",
       "document_ids": [
         "DOC-060",
         "DOC-087"
@@ -560,7 +555,7 @@
     {
       "slug": "long-context-safety",
       "type": "concept",
-      "summary": "Investigating and evaluating new safety risks and vulnerabilities introduced by extending the context length of LLMs, such as complex jailbreaks distributed across long inputs.",
+      "summary": "New safety risks and vulnerabilities introduced by large context windows, such as complex jailbreaks distributed across long inputs or subtle data exfiltration. Concerns adversarial safety risks; for non-adversarial performance degradation, see context-rot-and-long-context-failure-modes.",
       "document_ids": [
         "DOC-124",
         "DOC-125"

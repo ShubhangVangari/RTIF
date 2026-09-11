@@ -371,14 +371,12 @@ alongside 2–3 retrieved pages and the generated answer. Capping the index at
 ~4,000 tokens across ~40 rows yields ~100 tokens per row, which is roughly 65
 words once slug and markup are deducted.
 
-The budget is a ceiling, not a target, and it is **not currently binding**: the
-seed index renders at approximately 45% of the cap. Summary length is therefore
-set by how much text discrimination actually requires. The ceiling exists to
-define where this architecture stops scaling — which is the honest answer to
-"why not a thousand documents?"
-
-Measure the rendered index with `count_tokens` and replace this estimate with
-the measurement.
+The budget is a ceiling, not a target, and it is **not currently binding**.
+Measured: the 31-page seed index renders at 2,138 tokens, 53% of the
+4,000-token cap. Summary length is therefore set by how much text
+discrimination actually requires. The ceiling exists to define where this
+architecture stops scaling — which is the honest answer to "why not a
+thousand documents?"
 
 ### 3.5 The summary test
 
