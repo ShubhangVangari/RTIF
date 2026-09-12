@@ -302,8 +302,11 @@ written in full with their citation.
 
 ### 2.6 Calibration
 
-The concept space is seeded from `wiki_local/survey.json`: **31 pages, 218
-documents, 2–18 documents per page.** A compile run proposing more than a small
+The concept space is seeded from `wiki_local/survey.json`: **31 pages, 223
+documents, 2–18 documents per page.** Documents the survey assigned to no
+cluster have no home in the seed taxonomy and are recorded on the nearest
+concept page, which is the behaviour §2.2 already specifies for material below
+the page floor. A compile run proposing more than a small
 number of new pages is a signal that §2.2 is being applied too loosely, not
 that the corpus is richer than the survey found. Creates-per-ingest is
 instrumented and should decay toward zero across the run.

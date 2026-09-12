@@ -20,19 +20,47 @@ MINOR_WORDS = {
     "as", "at", "by", "in", "of", "on", "per", "to", "up", "via", "vs",
 }
 
+# Compounds whose hyphen is part of the term, as token sequences.
+HYPHENATED = [
+    ["end", "to", "end"],
+    ["multi", "agent"],
+    ["multi", "hop"],
+    ["long", "context"],
+    ["cross", "lingual"],
+    ["open", "source"],
+]
+
+
+def _cap(word: str, first: bool, last: bool) -> str:
+    lower = word.lower()
+    if lower in ACRONYMS:
+        return lower.upper()
+    if not first and not last and lower in MINOR_WORDS:
+        return lower
+    return lower.capitalize()
+
 
 def slug_to_title(slug: str) -> str:
     words = slug.split("-")
     last = len(words) - 1
     parts = []
-    for i, word in enumerate(words):
-        lower = word.lower()
-        if lower in ACRONYMS:
-            parts.append(lower.upper())
-        elif i not in (0, last) and lower in MINOR_WORDS:
-            parts.append(lower)
-        else:
-            parts.append(lower.capitalize())
+    i = 0
+    while i < len(words):
+        # A hyphenated compound keeps its hyphen: the hyphen is part of the term.
+        compound = next(
+            (c for c in HYPHENATED if words[i : i + len(c)] == c), None
+        )
+        if compound:
+            parts.append(
+                "-".join(
+                    _cap(word, first=(i + offset == 0), last=(i + offset == last))
+                    for offset, word in enumerate(compound)
+                )
+            )
+            i += len(compound)
+            continue
+        parts.append(_cap(words[i], first=(i == 0), last=(i == last)))
+        i += 1
     return " ".join(parts)
 
 

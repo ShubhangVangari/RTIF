@@ -4,6 +4,8 @@ __pycache__/
 venv/
 .venv/
 wiki_local/wiki/
+ingest_full.log
+ingest_full.pid
 index-rag-venv/
 raw/
 .DS_Store

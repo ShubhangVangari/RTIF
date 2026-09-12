@@ -1,0 +1,319 @@
+You are selecting which pages of a compiled wiki a new document might affect.
+
+Below is the wiki's routing index: one row per page, `[[slug]] — summary`. Read
+the document, then return the slugs of the pages whose scope it touches.
+
+- Return at most 8 slugs, most relevant first.
+- Fewer is better than more. A page you name is loaded in full and rewritten, so
+  name a page only if the document actually bears on its subject.
+- Return only slugs that appear in the index, spelled exactly.
+- If the document introduces a concept no page covers, do not invent a slug for
+  it. The next stage decides whether a new page is warranted.
+
+Return JSON only, of the shape: {"slugs": ["slug-one", "slug-two"]}
+
+===== THE INDEX =====
+{{INDEX}}
+
+===== THE DOCUMENT ({{DOC_ID}}) =====
+{{DOCUMENT}}
+
+=== STAGE 2 ===
+
+You are the compiler for a wiki whose full specification appears below. The
+specification is the authority; where this prompt and the specification differ,
+the specification wins.
+
+Ingest ONE document. For each concept it touches, take exactly one path and emit
+a record of what you decided.
+
+===== THE THREE PATHS (§2.1) =====
+
+Paths are ordered by cost. Take the EARLIEST applicable path.
+
+Path A — extend. A page for the concept exists and the document's claims are
+compatible with what it already says. Add the claims, grouped into existing
+thematic sections where possible.
+
+Path C — flag. A page exists and the document contradicts it. Record both
+positions with attribution, add or update the `contested` flag, and do not
+resolve. Path C modifies the page without asserting new consensus.
+
+Path B — create. No page covers the concept AND the floor in §2.2 is met: two
+independent sources, meaning two distinct files in raw/. A concept attested by
+this document alone is more likely the document's private vocabulary than a
+feature of the corpus — extend an existing page instead. You may NEVER create an
+entity page (§2.2): a named model, benchmark, dataset or system is recorded on
+the nearest concept page, never given its own.
+
+When in doubt, extend. Creating changes the index that every future query must
+read, and forces neighbouring summaries to be revised (§3.6).
+
+===== BEFORE PATH C, RUN THE FOUR-STEP CHECK (§5.1) =====
+
+Emit `classification` on EVERY decision, including Path A, so the decision log
+shows what was considered and rejected (§5.5). Emit `classification_reasoning`
+on every decision too: the result of the check below, in two or three sentences.
+
+`classification_reasoning` must say WHAT YOU CONSIDERED AND WHY YOU REJECTED IT.
+Name the proposition you tested against and the reason it did not hold. Never
+write "no contradiction was found or considered", or any variant claiming you
+did not consider one — the check is mandatory, so you always considered one, and
+the log exists to record that reasoning. If nothing on the page could conflict,
+say which claim you tested and why it was compatible.
+
+You may NOT emit Path C until all four steps hold.
+
+STEP 1 — Quote the page's existing `at_issue` proposition P verbatim. If the
+page is not yet contested, write out the single proposition the page currently
+asserts that you believe this document denies.
+
+STEP 2 — State what this document asserts ABOUT P SPECIFICALLY. Not about the
+page's topic — about the proposition itself. If you cannot say what the document
+claims about P, there is no contradiction to record.
+
+STEP 3 — Confirm the document asserts NOT-P. If the document instead answers a
+DIFFERENT QUESTION — *how* to do X well, *when* X applies, *under what
+conditions* X holds, or *which variant* of X works — then it is a SCOPE
+DIFFERENCE. Take Path A, state the condition under which each claim holds, and
+do NOT take Path C.
+
+STEP 4 — Only if steps 1, 2 and 3 all hold may you emit Path C.
+
+Worked example of the failure this prevents. A page's P is "whether running
+multiple agents improves or degrades production reliability". A document argues
+that flat multi-agent teams sharing one base model underperform, while
+hierarchical teams with structured feedback perform well. That document answers
+HOW TO BUILD such a system, not WHETHER it works, and both existing positions
+remain true alongside it. It is a scope difference: Path A, stating the
+condition under which each claim holds. Emitting Path C there would manufacture
+a dispute the corpus does not contain.
+
+The three classifications, for reference:
+
+- scope-difference → Path A, no flag. The sources address different conditions,
+  populations or scales, and appear to conflict only because the conditions went
+  unstated. Test: can both claims be true if their conditions differ? Then
+  extend normally and state the condition under which each claim holds.
+  Recording a scope difference as a contradiction manufactures a dispute that is
+  not in the corpus.
+- supersession → Path A, with a timeline. A later source had access to the
+  earlier one and corrects it, or the same authors revise their own result.
+  Test: is there an explicit temporal correction, verifiable from the published
+  dates and the document's own text? Then record both, mark the earlier claim
+  superseded with its date and the superseding citation, and DO NOT delete it. A
+  corrected claim remains visible as a signposted dead end.
+- contradiction → Path C. Two sources assert incompatible claims about the same
+  referent under the same conditions. Test: can you write a single proposition P
+  such that one source asserts P and another asserts not-P?
+
+WHEN THE CLASSIFICATION IS GENUINELY UNCERTAIN, TREAT IT AS A CONTRADICTION.
+The failure is asymmetric: wrongly resolving a real contradiction removes the
+counterargument from the system permanently, which is the failure this project
+exists to attack.
+
+READ THAT RULE NARROWLY. It applies ONLY when you genuinely cannot tell whether
+both claims could be true under differing conditions. It does NOT apply when the
+document is clearly answering a different question. That is not uncertainty; it
+is a scope difference, and it takes Path A. Recording a scope difference as a
+contradiction manufactures a dispute that is not in the corpus, and false
+contradictions make the contested pages worthless.
+
+===== NEVER RESOLVE A DISAGREEMENT (§5.3) =====
+
+You must not:
+- state which position is correct, better supported, or more widely held;
+- synthesise a middle position that no source holds;
+- write "some argue X while others argue Y" without attaching citations to X and
+  to Y;
+- use asymmetric hedging — "although some claim", "despite the consensus", "one
+  outlier argues" — which smuggles a verdict in through grammar;
+- resolve by source authority, in either direction. An academic source does not
+  outrank a practitioner source, and a practitioner source does not outrank an
+  academic one;
+- resolve using knowledge not present in the corpus.
+
+`contested` is terminal. Never remove it.
+
+If a page is already contested and this document AGREES with an existing
+position, add its citation to that position's attribution list and change
+nothing else (§5.4). The structure stays symmetric; the evidence does not. Write
+no sentence about which position is now better supported, and no count. If it
+introduces a THIRD position, add a position block and re-sort by the date rule.
+If it contradicts on a different proposition, add a second `###` block under
+`## Disagreement` with its own `At issue`.
+
+===== PROVENANCE (§6) =====
+
+- Cite inline as [DOC-xxx] immediately after the claim it supports. Multiple
+  sources for one claim: [DOC-041][DOC-112], no separator.
+- EVERY SENTENCE must be supported by a cited source — not merely every
+  paragraph. A paragraph whose first sentence cites [DOC-xxx] does not license
+  the sentences after it.
+- If you cannot attach a citation to a sentence, you are writing from your own
+  training data. DELETE THE SENTENCE. Unsupported scene-setting is the most
+  common form of this failure: "the design of these systems often involves
+  defining communication protocols, task decomposition strategies, and methods
+  for aggregating outputs" sounds harmless, is not in any source, and is exactly
+  what §6.2 prohibits.
+- The only new citation you may introduce is {{DOC_ID}}, the document you are
+  ingesting. Citations already on a page stay exactly as they are.
+- Write only what the cited sources support. No model knowledge: if the corpus
+  does not say it, it does not go on the page, however true it is.
+- No uncited connective inference. A sentence drawing a conclusion from two
+  sources cites both. A sentence drawing a conclusion from neither is
+  unsupported: drop it, or flag it `unresolved`.
+- No hedged attribution. "Some researchers argue" without a DOC ID is not a
+  citation.
+- Direct quotation only where exact wording carries the claim, under fifteen
+  words. Everything else is paraphrase.
+- No `## Sources` or `## References` section. Citations are inline only.
+
+===== LINKING (§4) =====
+
+- `[[slug]]` inline in body prose, or `[[slug|display text]]` for alternate
+  surface text. Never in frontmatter, never in headings, never in a "related
+  pages" list at the foot of a page — a link exists because a sentence needed it.
+- First mention only within a page. Repeat mentions are plain text.
+- Link the concept, not the phrasing.
+- Target 3–8 outbound links per page. Below three the page is isolated; above
+  eight the edges stop carrying information.
+- Never link a page to itself.
+- You may only link to a slug in the list of existing pages given below. Do not
+  link forward to pages you expect to be created later in the run.
+- Source pages are never linked with [[...]]. They are reached by [DOC-xxx].
+
+===== NO COMPUTED VALUES (§2.5) =====
+
+Never write a quantity the system can compute for itself: source counts, page
+counts, link counts, "the six failure modes". Such values are copies, they drift
+from the thing they describe, and readers trust copies. Quantities reported BY a
+source — a benchmark score, a reported win rate, a model size — are claims about
+the world and are written in full with their citation.
+
+===== BODY FORMAT (§1.2) =====
+
+- Exactly one `#` H1, matching the page title.
+- `##` for body sections. Group claims by theme, NEVER by source document.
+- `###` only where the page genuinely needs sub-structure.
+- If present, `## Disagreement` is the FINAL section.
+
+===== THE DISAGREEMENT SECTION (§5.2) =====
+
+Present only on a page carrying a `contested` flag. Format exactly:
+
+## Disagreement
+
+**At issue:** <the proposition, in one sentence>
+
+**Position — <neutral label stating the claim>.** <the position, stated in its
+own terms> [DOC-018][DOC-071]
+
+**Position — <neutral label stating the claim>.** <the position, stated in its
+own terms> [DOC-040]
+
+**Not in dispute:** <the common ground>
+
+Requirements:
+- `At issue` states the proposition in ONE sentence. If it cannot be written as
+  one proposition, this is more than one disagreement and each gets its own
+  `###` sub-block under `## Disagreement`.
+- EVERY position carries at least one [DOC-xxx]. A position with no citation
+  behind it is not a position; it is your opinion, and is prohibited.
+- Position labels are neutral and state the claim, not its standing. Never "the
+  naive view", "the consensus", "the outlier".
+- `Not in dispute` is required wherever common ground exists. Without it a
+  disagreement makes the whole page look uncertain and the reader loses the part
+  that is settled.
+- Position order is computed, not chosen: ascending by earliest publication date
+  among each position's supporting sources. Order carries no verdict.
+
+===== FLAGS (§1.6) =====
+
+A flag is a string of the form `kind: payload`.
+- `contested: <the proposition at issue>` — terminal, not a defect, never
+  removed. The payload is the `at_issue` string, stated once, no narration.
+- `unresolved: <what>` — a claim you could not attribute or place.
+- `oversized: <why>` — over the review threshold but unsplittable without
+  producing sub-floor pages.
+- `non-seed` — set on EVERY page you create by Path B.
+
+Return each page's COMPLETE flag list, including flags it already carried.
+
+===== SUMMARIES (§3) =====
+
+Rewrite a page's summary only if its scope changed materially through this
+ingest, or if you created the page. Otherwise return the existing summary
+unchanged, verbatim.
+
+A summary is a discriminator, not a description:
+1. Scope — led by the distinguishing feature, not the category.
+2. Boundary — `Concerns <this>; for <that>, see <sibling-slug>.` wherever a
+   confusion set exists.
+3. Contention marker — if the page is contested, a clause stating that the
+   corpus disagrees and on what.
+
+Name the sibling as a BARE slug: `see llm-agent-architectures.` A summary is
+frontmatter, and §4.1 forbids links there — never write `[[double brackets]]`
+inside a summary. Brackets belong in the body only.
+
+Target 40–55 words, hard ceiling 65. No digits. Never open with a category noun
+phrase ("Methods for", "Techniques for", "Benchmarks and", "Analysis of",
+"Approaches to", "Strategies for"). Never identify a page by who wrote its
+sources. If you rewrite a summary, write it against the confusion set below, and
+if that forces a neighbour's summary to change too, return the neighbour as well.
+
+===== THE SOURCE PAGE (§1.3) =====
+
+Return `source_page_body`, the body of wiki/sources/{{DOC_ID}}.md:
+
+# <the exact title of the document>
+
+<a compiled summary of what this document claims and argues, in its own terms>
+
+## Pages affected
+
+- [[slug-one]] — A (extend)
+- [[slug-two]] — C (contradiction: <what the new position concerns>)
+
+List EVERY page you touched, with the path taken. A document that was read and
+produced nothing is a compile failure, not an absence (§6.3). The
+`## Pages affected` list must agree exactly with your `decisions`: every slug in
+one appears in the other.
+
+===== WHAT TO RETURN =====
+
+- `decisions` — one record per concept you acted on, with `classification` and
+  `classification_reasoning` set on every one, including Path A decisions where
+  a contradiction was considered and rejected. For Path C also set `at_issue`,
+  `positions`, and exactly one of `aligns_with` / `new_position`.
+- `pages` — the COMPLETE new markdown body for every page you changed or
+  created, with its summary and full flag list. Omit pages you did not touch.
+- `source_page_body` — as above.
+
+===== THE SPECIFICATION =====
+{{SCHEMA}}
+
+===== PAGES THAT EXIST (the only slugs you may link to) =====
+{{SLUGS}}
+
+===== PAGES THAT ALREADY HAVE A WRITTEN BODY =====
+These pages have content. A link to one lands the reader somewhere that actually
+answers them, so wherever your prose genuinely refers to one of these concepts,
+link it — first mention only. This is how a page reaches §4.3's target of three
+to eight outbound links and stops being unreachable by multi-hop navigation.
+
+Do NOT manufacture a sentence in order to place a link, and do not link a term
+merely because a page with that name exists. The test is whether a reader
+following the link finds the continuation of this argument.
+
+{{POPULATED}}
+
+===== PAGES SELECTED FOR THIS DOCUMENT =====
+{{PAGES}}
+
+===== CONFUSION SET — neighbouring summaries, for §3.1 =====
+{{CONFUSION}}
+
+===== THE DOCUMENT TO INGEST ({{DOC_ID}}) =====
+{{DOCUMENT}}

@@ -53,6 +53,7 @@ class Decision:
     page: str
     why: str
     classification: str | None = None
+    classification_reasoning: str | None = None
     at_issue: str | None = None
     aligns_with: str | None = None
     new_position: str | None = None
