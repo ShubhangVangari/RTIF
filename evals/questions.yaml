@@ -1,0 +1,195 @@
+# Eval questions for comparing the wiki system against the vector RAG baseline.
+#
+# Every non-absence question was written by reading the actual compiled pages
+# in wiki_local/wiki/concepts/ and the raw documents behind them, so each one
+# has a real answer somewhere in the 152 ingested documents.
+#
+# Every absence question was verified by searching all 152 ingested documents
+# for the topic and its variants, and finding nothing. The correct answer to
+# those is "the corpus does not cover this" — a confident answer is a failure.
+
+# ---------------------------------------------------------------
+# simple_lookup — one fact, sitting in one place.
+# Both systems are expected to do well.
+# ---------------------------------------------------------------
+
+- id: q01
+  type: simple_lookup
+  question: What is context rot?
+  must_mention: model performance degrading as the input context grows longer
+
+- id: q02
+  type: simple_lookup
+  question: What is a faithfulness hallucination?
+  must_mention: output that contradicts or is not supported by the provided source documents
+
+- id: q03
+  type: simple_lookup
+  question: What is the Agents Rule of Two?
+  must_mention: an agent session should have no more than two of untrusted input, access to sensitive data, and the ability to change state or communicate externally
+
+- id: q04
+  type: simple_lookup
+  question: What is pseudo-relevance feedback in retrieval?
+  must_mention: using the top results of an initial search to refine or expand the query for a second retrieval round, without explicit user feedback
+
+- id: q05
+  type: simple_lookup
+  question: What problem does Contextual Retrieval solve when chunking documents for RAG?
+  must_mention: a chunk on its own can lack the surrounding context needed to be understood or retrieved correctly
+
+# ---------------------------------------------------------------
+# paper_specific — about one named paper or framework.
+# The wiki is expected to lose: it has no per-paper pages by design,
+# while the baseline retrieves the exact chunk.
+# ---------------------------------------------------------------
+
+- id: q06
+  type: paper_specific
+  question: What does the 360REA framework propose?
+  must_mention: a hierarchical multi-agent framework using 360 degree assessment and accumulated reusable experience to improve agent performance
+
+- id: q07
+  type: paper_specific
+  question: What does ACER do to build long-context models?
+  must_mention: it automatically synthesises task-specific long-context training data using a retrieval pipeline, rather than relying on a generalist context extension stage
+
+- id: q08
+  type: paper_specific
+  question: What is LongPO and how does it work?
+  must_mention: short-context models self-evolve long-context ability by training on self-generated short-to-long preference data
+
+- id: q09
+  type: paper_specific
+  question: What does ANAH-v2 introduce for hallucination annotation?
+  must_mention: an iterative self-training framework that scales up the annotation dataset and improves the accuracy of the hallucination annotator at the same time
+
+- id: q10
+  type: paper_specific
+  question: What is infini-gram mini and what data structure does it use?
+  must_mention: an exact n-gram search system over internet-scale corpora built on the FM-index
+
+# ---------------------------------------------------------------
+# exact_detail — a specific number or figure. Each one was checked
+# against the compiled pages and is NOT there, so the wiki is
+# expected to lose: compilation is lossy, chunks are verbatim.
+# ---------------------------------------------------------------
+
+- id: q11
+  type: exact_detail
+  question: How large are infini-gram mini's indexes relative to the size of the corpus they index?
+  must_mention: 44 percent of the corpus size
+
+- id: q12
+  type: exact_detail
+  question: How many examples and how many tasks does the CLongEval benchmark contain?
+  must_mention: 7,267 examples across 7 tasks
+
+- id: q13
+  type: exact_detail
+  question: How many problems does the FAITHQA benchmark for intent hallucination contain?
+  must_mention: 20,068 problems
+
+- id: q14
+  type: exact_detail
+  question: What average progress do language model agents achieve on EscapeBench without hints?
+  must_mention: about 15 percent average progress
+
+- id: q15
+  type: exact_detail
+  question: How many LLM-as-a-Judge models were benchmarked in CodeJudgeBench?
+  must_mention: 26 models
+
+# ---------------------------------------------------------------
+# synthesis — needs two separate topics combined.
+# The wiki is expected to win: its pages link to each other, so a
+# multi-hop read can reach both halves of the answer.
+# ---------------------------------------------------------------
+
+- id: q16
+  type: synthesis
+  question: How does context rot affect the design of multi-agent systems?
+  must_mention: sub-agents are given clean or isolated context so they do not inherit the primary agent's long degraded history
+
+- id: q17
+  type: synthesis
+  question: Why is faithfulness hallucination a particular concern for RAG systems specifically?
+  must_mention: RAG output is supposed to be grounded in the retrieved source documents, so output unsupported by those documents is exactly the failure RAG is meant to prevent
+
+- id: q18
+  type: synthesis
+  question: What is the relationship between methods for training long-context models and methods for evaluating them?
+  must_mention: training extends the effective context length while evaluation tests whether that claimed capability is real, and existing long-context benchmarks have been criticised for not measuring it properly
+
+- id: q19
+  type: synthesis
+  question: How do the known reliability problems of LLM judges affect the evaluation of LLM agents?
+  must_mention: agent evaluation that relies on a model as judge inherits the judge's biases and inconsistency
+
+- id: q20
+  type: synthesis
+  question: How does the risk of prompt injection shape architectural choices for agents?
+  must_mention: architecture constrains which capabilities an agent may combine, because filters and classifiers are not considered reliable enough on their own
+
+# ---------------------------------------------------------------
+# disagreement — drawn from the six pages flagged contested.
+# The wiki is expected to win: contradictions are written onto the
+# page rather than left to surface by chance.
+# ---------------------------------------------------------------
+
+- id: q21
+  type: disagreement
+  question: What do sources disagree about regarding how benchmark contamination affects model rankings?
+  must_mention: whether contamination only inflates absolute scores while leaving relative rankings intact, or makes leaderboard comparisons unusable
+
+- id: q22
+  type: disagreement
+  question: Is there agreement in the literature on what the term hallucination means?
+  must_mention: no, an audit of the literature found a lack of consensus on the definition, while other sources use a settled definition of factually incorrect or fabricated content
+
+- id: q23
+  type: disagreement
+  question: Do sources agree that multi-agent systems improve reliability in production?
+  must_mention: no, some present them as an effective pattern for complex work while others argue they are fragile because context cannot be shared thoroughly enough between agents
+
+- id: q24
+  type: disagreement
+  question: Do large context windows make RAG obsolete?
+  must_mention: this is disputed, with context rot and curated retrieval arguing against long context, and multi-document synthesis arguing that native long context is necessary
+
+- id: q25
+  type: disagreement
+  question: Is single-pass retrieval sufficient for production RAG systems?
+  must_mention: disputed, with most sources arguing iterative architectures like reranking or multi-step search are required, against practitioner evidence that simple designs can be more effective
+
+# ---------------------------------------------------------------
+# absence — genuinely NOT in the corpus. Verified by searching all
+# 152 ingested documents for each topic and its variants.
+# The correct answer is "the corpus does not cover this."
+# A confident, detailed answer is a failure, not a success.
+# ---------------------------------------------------------------
+
+- id: q26
+  type: absence
+  question: What does the corpus say about speculative decoding for faster inference?
+  must_mention: that the corpus does not cover speculative decoding
+
+- id: q27
+  type: absence
+  question: What do these documents say about mixture-of-experts architectures?
+  must_mention: that the corpus does not cover mixture-of-experts architectures
+
+- id: q28
+  type: absence
+  question: What does the corpus say about federated learning for training language models?
+  must_mention: that the corpus does not cover federated learning
+
+- id: q29
+  type: absence
+  question: What do these documents say about differential privacy in language models?
+  must_mention: that the corpus does not cover differential privacy
+
+- id: q30
+  type: absence
+  question: What does the corpus say about watermarking language model output?
+  must_mention: that the corpus does not cover watermarking

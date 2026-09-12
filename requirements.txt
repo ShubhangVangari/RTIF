@@ -4,3 +4,4 @@ google-cloud-storage
 google-genai
 pyyaml
 pytest
+anthropic
