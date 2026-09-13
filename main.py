@@ -24,6 +24,7 @@ from pathlib import Path
 import uvicorn
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse
 from google import genai
 from google.cloud import storage
 
@@ -142,6 +143,13 @@ def _index_entry(page: Page) -> dict:
 # ---------------------------------------------------------------------------
 # Endpoints
 # ---------------------------------------------------------------------------
+
+
+# Serves the console itself. Called by a browser opening the site's root
+# URL. Returns the one static HTML file the whole frontend lives in.
+@app.get("/")
+def home():
+    return FileResponse("static/index.html")
 
 
 # Tells anything checking on the server that it is up. Called by Cloud Run's
