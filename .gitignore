@@ -9,3 +9,4 @@ ingest_full.pid
 index-rag-venv/
 raw/
 .DS_Store
+*.zip
